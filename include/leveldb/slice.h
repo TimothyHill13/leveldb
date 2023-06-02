@@ -12,7 +12,7 @@
 // non-const method, all threads accessing the same Slice must use
 // external synchronization.
 
-#ifndef STORAGE_LEVELDB_INCLUDE_SLICE_H_
+#ifndef STORAGE_LEVELDB_INCLUDE_SLICE_H_  // 条件编译，防止头文件重复包含和编译
 #define STORAGE_LEVELDB_INCLUDE_SLICE_H_
 
 #include <cassert>
@@ -27,7 +27,7 @@ namespace leveldb {
 class LEVELDB_EXPORT Slice {
  public:
   // Create an empty slice.
-  Slice() : data_(""), size_(0) {}
+  Slice() : data_(""), size_(0) {}  //  使用初始化列表初始化成员变量
 
   // Create a slice that refers to d[0,n-1].
   Slice(const char* d, size_t n) : data_(d), size_(n) {}
@@ -39,7 +39,7 @@ class LEVELDB_EXPORT Slice {
   Slice(const char* s) : data_(s), size_(strlen(s)) {}
 
   // Intentionally copyable.
-  Slice(const Slice&) = default;
+  Slice(const Slice&) = default;  //  已经自定义了构造函数，还想使用编译器默认生成的两个构造函数，则使用default关键字
   Slice& operator=(const Slice&) = default;
 
   // Return a pointer to the beginning of the referenced data
@@ -90,7 +90,7 @@ class LEVELDB_EXPORT Slice {
   size_t size_;
 };
 
-inline bool operator==(const Slice& x, const Slice& y) {
+inline bool operator==(const Slice& x, const Slice& y) {  // 内联函数可以解决频繁调用的函数大量消耗栈空间（栈内存）的问题
   return ((x.size() == y.size()) &&
           (memcmp(x.data(), y.data(), x.size()) == 0));
 }
